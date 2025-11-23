@@ -1,0 +1,112 @@
+<div class="order-history-container">
+  <div class="header">
+    <h1>Order History</h1>
+    <p>View and manage your orders</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading your orders...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-message">
+    <p>{{ error }}</p>
+    <button (click)="retryLoad()" class="btn btn-primary">Retry</button>
+  </div>
+
+  <!-- Orders Content -->
+  <div *ngIf="!loading && !error" class="orders-content">
+    <!-- Filters & Sort -->
+    <div class="filters-section">
+      <div class="filter-group">
+        <label>Filter by Status:</label>
+        <div class="status-filters">
+          <button 
+            *ngFor="let status of statusOptions"
+            class="filter-btn"
+            [class.active]="selectedStatus === status"
+            (click)="onStatusChange(status)">
+            {{ status }}
+          </button>
+        </div>
+      </div>
+
+      <div class="sort-group">
+        <label>Sort by:</label>
+        <select [value]="sortBy" (change)="onSortChange($event.target.value)" class="sort-select">
+          <option value="date">Recent First</option>
+          <option value="amount">Highest Amount</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="filteredOrders.length === 0" class="empty-state">
+      <div class="empty-icon">📋</div>
+      <h2>No orders found</h2>
+      <p>You don't have any {{ selectedStatus !== 'All' ? selectedStatus.toLowerCase() : '' }} orders yet.</p>
+    </div>
+
+    <!-- Orders Table -->
+    <div *ngIf="filteredOrders.length > 0" class="orders-table-wrapper">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of filteredOrders" class="order-row">
+            <td class="order-id">
+              <strong>{{ order.id }}</strong>
+            </td>
+            <td class="order-date">
+              {{ order.createdAt | date: 'MMM dd, yyyy' }}
+            </td>
+            <td class="order-items">
+              <span class="item-count">{{ order.itemCount }} item(s)</span>
+            </td>
+            <td class="order-amount">
+              <strong>${{ order.totalAmount | number: '1.2-2' }}</strong>
+            </td>
+            <td class="order-status">
+              <span class="status-badge" [ngClass]="getStatusClass(order.status)">
+                {{ getStatusBadge(order.status) }}
+              </span>
+            </td>
+            <td class="order-action">
+              <button 
+                class="btn btn-small"
+                (click)="viewOrderDetails(order.id)">
+                View
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Summary Stats -->
+    <div *ngIf="filteredOrders.length > 0" class="summary-stats">
+      <div class="stat">
+        <span class="stat-label">Total Orders:</span>
+        <span class="stat-value">{{ filteredOrders.length }}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Total Spent:</span>
+        <span class="stat-value">${{ (filteredOrders | reduce: (sum, order) => sum + order.totalAmount: 0) | number: '1.2-2' }}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Total Items:</span>
+        <span class="stat-value">{{ (filteredOrders | reduce: (sum, order) => sum + order.itemCount: 0) }}</span>
+      </div>
+    </div>
+  </div>
+</div>

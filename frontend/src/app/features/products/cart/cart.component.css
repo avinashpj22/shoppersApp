@@ -1,0 +1,139 @@
+.cart-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.cart-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 60px 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cart-table th {
+  background: #667eea;
+  color: white;
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.cart-table td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-item:hover {
+  background: #f8f9fa;
+}
+
+.cart-summary {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.summary-item.total {
+  border-top: 2px solid #eee;
+  padding-top: 15px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #667eea;
+}
+
+.discount-section {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.discount-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.discount-applied {
+  color: #28a745;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.full-width {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.button-primary {
+  background-color: #667eea;
+  color: white;
+}
+
+.button-primary:hover {
+  background-color: #5568d3;
+}
+
+.button-secondary {
+  background-color: #764ba2;
+  color: white;
+}
+
+.button-secondary:hover {
+  background-color: #6a3f91;
+}
+
+input[type="number"] {
+  width: 60px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .cart-content {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-summary {
+    position: static;
+  }
+}

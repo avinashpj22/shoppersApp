@@ -1,0 +1,90 @@
+<div class="app-container">
+  <!-- Navigation Header -->
+  <header class="app-header">
+    <div class="header-content">
+      <div class="logo">
+        <h1>{{ title }}</h1>
+      </div>
+      
+      <nav class="main-nav" [class.open]="navOpen">
+        <a routerLink="/products" routerLinkActive="active" (click)="closeNav()">
+          <i class="icon-grid"></i> Products
+        </a>
+        <a routerLink="/cart" routerLinkActive="active" (click)="closeNav()">
+          <i class="icon-cart"></i> Cart
+          <span class="cart-badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+        </a>
+        <a routerLink="/orders" routerLinkActive="active" (click)="closeNav()">
+          <i class="icon-history"></i> Orders
+        </a>
+      </nav>
+
+      <!-- Search Bar -->
+      <div class="search-container">
+        <input 
+          type="text" 
+          placeholder="Search products..." 
+          (keyup.enter)="onSearch($event.target.value)"
+          class="search-input"
+        />
+        <button class="search-btn">🔍</button>
+      </div>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="menu-toggle" (click)="toggleNav()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Category Filter -->
+  <aside class="category-sidebar">
+    <div class="categories">
+      <h3>Categories</h3>
+      <div class="category-list">
+        <button 
+          (click)="onCategoryFilter('Electronics')"
+          class="category-btn"
+        >
+          Electronics
+        </button>
+        <button 
+          (click)="onCategoryFilter('Clothing')"
+          class="category-btn"
+        >
+          Clothing
+        </button>
+        <button 
+          (click)="onCategoryFilter('Books')"
+          class="category-btn"
+        >
+          Books
+        </button>
+        <button 
+          (click)="onCategoryFilter('Home')"
+          class="category-btn"
+        >
+          Home & Garden
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="app-main">
+    <div class="loading-spinner" *ngIf="loading$ | async">
+      <div class="spinner"></div>
+      <p>Loading...</p>
+    </div>
+    
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2025 E-Commerce Platform. All rights reserved.</p>
+    <p>Built with Angular, .NET Core, and Azure</p>
+  </footer>
+</div>

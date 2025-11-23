@@ -1,0 +1,143 @@
+<div class="product-list-container">
+  <!-- Header Section -->
+  <div class="list-header">
+    <h2>Products</h2>
+    <div class="controls">
+      <!-- Sort Control -->
+      <div class="sort-control">
+        <label for="sort">Sort By:</label>
+        <select id="sort" [value]="sortBy" (change)="onSortChange($event.target.value)">
+          <option value="name">Name</option>
+          <option value="price">Price</option>
+          <option value="newest">Newest</option>
+        </select>
+      </div>
+
+      <!-- View Mode Toggle -->
+      <div class="view-toggle">
+        <button 
+          class="view-btn" 
+          [class.active]="viewMode === 'grid'"
+          (click)="onViewModeChange('grid')"
+          title="Grid View">
+          ▦
+        </button>
+        <button 
+          class="view-btn" 
+          [class.active]="viewMode === 'list'"
+          (click)="onViewModeChange('list')"
+          title="List View">
+          ≡
+        </button>
+      </div>
+
+      <!-- Page Size -->
+      <div class="page-size-control">
+        <label for="pageSize">Items per page:</label>
+        <select id="pageSize" [value]="pageSize" (change)="onPageSizeChange($event.target.value)">
+          <option value="6">6</option>
+          <option value="12">12</option>
+          <option value="24">24</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="(error$ | async) as error" class="error-message">
+    <p>{{ error }}</p>
+    <button (click)="retryLoadProducts()">Retry</button>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="(loading$ | async)" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading products...</p>
+  </div>
+
+  <!-- Products Grid/List -->
+  <div *ngIf="!(loading$ | async)" class="products-grid" [class.list-view]="viewMode === 'list'">
+    <div 
+      *ngFor="let product of (products$ | async)" 
+      class="product-card"
+      [class.list-item]="viewMode === 'list'">
+      
+      <div class="product-image">
+        <div class="placeholder-image">
+          {{ product.name.charAt(0) }}
+        </div>
+      </div>
+
+      <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        
+        <p class="product-category">
+          <span class="category-badge">{{ product.category }}</span>
+        </p>
+        
+        <p class="product-description" *ngIf="viewMode === 'list'">
+          {{ product.description }}
+        </p>
+
+        <div class="product-meta">
+          <span class="stock-status" [class.low-stock]="product.stockQuantity < 5">
+            Stock: {{ product.stockQuantity }}
+          </span>
+          <span class="sku">SKU: {{ product.sku }}</span>
+        </div>
+
+        <div class="product-footer">
+          <div class="price-section">
+            <span class="price">${{ product.price | number: '1.2-2' }}</span>
+          </div>
+
+          <div class="actions">
+            <button 
+              class="btn btn-primary"
+              (click)="viewProductDetail(product.id)">
+              View
+            </button>
+            <button 
+              class="btn btn-secondary"
+              (click)="addToCart(product)"
+              [disabled]="product.stockQuantity === 0">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Products Message -->
+  <div *ngIf="!(loading$ | async) && (products$ | async)?.length === 0" class="no-products">
+    <p>No products found.</p>
+    <button (click)="clearFilters()" class="btn btn-primary">Clear Filters</button>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="!(loading$ | async) && (pagination$ | async) as pagination" class="pagination">
+    <button 
+      class="page-btn"
+      [disabled]="pagination.pageNumber === 1"
+      (click)="onPageChange(pagination.pageNumber - 1)">
+      ← Previous
+    </button>
+
+    <div class="page-numbers">
+      <span class="page-info">
+        Page {{ pagination.pageNumber }} of {{ pagination.totalPages }}
+      </span>
+      <span class="page-info">
+        Total: {{ pagination.totalCount }} products
+      </span>
+    </div>
+
+    <button 
+      class="page-btn"
+      [disabled]="pagination.pageNumber >= pagination.totalPages"
+      (click)="onPageChange(pagination.pageNumber + 1)">
+      Next →
+    </button>
+  </div>
+</div>

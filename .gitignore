@@ -1,0 +1,29 @@
+# Frontend
+node_modules/
+dist/
+.angular/
+*.log
+npm-debug.log*
+
+# Backend
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.sln.DotSettings
+.DS_Store
+
+# IDEs
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+appsettings.Development.json
+
+# Dependencies
+/.dependencies/

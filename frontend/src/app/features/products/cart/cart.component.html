@@ -1,0 +1,76 @@
+<div class="cart-container">
+  <h1>Shopping Cart</h1>
+
+  <div class="cart-content">
+    <div class="cart-items-section">
+      <div *ngIf="cartItems.length === 0" class="empty-cart">
+        <p>Your cart is empty</p>
+        <button class="button button-primary" (click)="router.navigate(['/products'])">Continue Shopping</button>
+      </div>
+
+      <div *ngIf="cartItems.length > 0">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Total</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of cartItems" class="cart-item">
+              <td>{{ item.productName }}</td>
+              <td>${{ item.price }}</td>
+              <td>
+                <input type="number" [(ngModel)]="item.quantity" min="1" 
+                  (change)="updateQuantity(item.productId, item.quantity)">
+              </td>
+              <td>${{ (item.price * item.quantity) }}</td>
+              <td>
+                <button class="button button-secondary" (click)="removeItem(item.productId)">Remove</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div *ngIf="cartItems.length > 0" class="cart-summary">
+      <h2>Order Summary</h2>
+      
+      <div class="summary-item">
+        <span>Subtotal:</span>
+        <span>${{ getSubtotal() }}</span>
+      </div>
+
+      <div class="discount-section">
+        <input [(ngModel)]="discountCode" placeholder="Discount code" class="discount-input">
+        <button class="button button-primary" (click)="applyDiscount()">Apply</button>
+        <div *ngIf="discountApplied" class="discount-applied">
+          Discount applied: -${{ getDiscount() }}
+        </div>
+      </div>
+
+      <div class="summary-item">
+        <span>Tax (8%):</span>
+        <span>${{ getTax() }}</span>
+      </div>
+
+      <div class="summary-item">
+        <span>Shipping:</span>
+        <span *ngIf="getShipping() === 0">FREE</span>
+        <span *ngIf="getShipping() > 0">${{ getShipping() }}</span>
+      </div>
+
+      <div class="summary-item total">
+        <span>Total:</span>
+        <span>${{ getTotal() }}</span>
+      </div>
+
+      <button class="button button-primary full-width" (click)="checkout()">Proceed to Checkout</button>
+      <button class="button button-secondary full-width" (click)="clearCart()">Clear Cart</button>
+    </div>
+  </div>
+</div>

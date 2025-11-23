@@ -1,0 +1,181 @@
+<div class="product-detail-container" *ngIf="selectedProduct">
+  <!-- Breadcrumb Navigation -->
+  <div class="breadcrumb">
+    <button (click)="backToProducts()" class="back-link">← Back to Products</button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="(loading$ | async)" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading product details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="(error$ | async) as error" class="error-message">
+    <p>Error: {{ error }}</p>
+  </div>
+
+  <!-- Product Detail Content -->
+  <div *ngIf="!(loading$ | async) && selectedProduct" class="detail-content">
+    <!-- Product Image Section -->
+    <div class="image-section">
+      <div class="main-image">
+        <div class="placeholder-image">
+          {{ selectedProduct.name.charAt(0) }}
+        </div>
+      </div>
+      <div class="image-caption">
+        <p>{{ selectedProduct.category }}</p>
+      </div>
+    </div>
+
+    <!-- Product Info Section -->
+    <div class="info-section">
+      <!-- Product Header -->
+      <div class="product-header">
+        <h1 class="product-title">{{ selectedProduct.name }}</h1>
+        <div class="meta-info">
+          <span class="sku">SKU: {{ selectedProduct.sku }}</span>
+          <span class="status" [class.active]="selectedProduct.isActive">
+            {{ selectedProduct.isActive ? 'In Stock' : 'Out of Stock' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Category Badge -->
+      <div class="category-section">
+        <span class="category-badge">{{ selectedProduct.category }}</span>
+      </div>
+
+      <!-- Description -->
+      <div class="description-section">
+        <h2>Description</h2>
+        <p class="description">{{ selectedProduct.description }}</p>
+      </div>
+
+      <!-- Stock Information -->
+      <div class="stock-section">
+        <h3>Availability</h3>
+        <div class="stock-info">
+          <span class="stock-label">Stock Quantity:</span>
+          <span class="stock-value" [class.low]="selectedProduct.stockQuantity < 5">
+            {{ selectedProduct.stockQuantity }} units
+          </span>
+          <div *ngIf="selectedProduct.stockQuantity < 5" class="low-stock-warning">
+            ⚠ Only {{ selectedProduct.stockQuantity }} left in stock
+          </div>
+        </div>
+      </div>
+
+      <!-- Price Section -->
+      <div class="price-section">
+        <span class="price">{{ selectedProduct.price | currency }}</span>
+      </div>
+
+      <!-- Quantity Selector -->
+      <div class="quantity-section">
+        <h3>Quantity</h3>
+        <div class="quantity-selector">
+          <button 
+            class="qty-btn"
+            (click)="decreaseQuantity()"
+            [disabled]="quantity <= 1">
+            −
+          </button>
+          <input 
+            type="number" 
+            class="qty-input"
+            [value]="quantity"
+            (change)="updateQuantity($event.target.value)"
+            min="1"
+            [max]="selectedProduct.stockQuantity">
+          <button 
+            class="qty-btn"
+            (click)="increaseQuantity()"
+            [disabled]="quantity >= selectedProduct.stockQuantity">
+            +
+          </button>
+        </div>
+      </div>
+
+      <!-- Inventory Check Section -->
+      <div class="inventory-check-section" *ngIf="showCheckInventory && inventoryCheck$ | async as check">
+        <div class="check-result" [class.available]="check.isAvailable">
+          <p>
+            <strong>Inventory Check:</strong>
+            <span *ngIf="check.isAvailable" class="success">
+              ✓ {{ check.availableQuantity }} units available for your request
+            </span>
+            <span *ngIf="!check.isAvailable" class="error">
+              ✗ Not enough stock. Only {{ check.availableQuantity }} available.
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions-section">
+        <button 
+          class="btn btn-check-inventory"
+          (click)="checkInventory()"
+          [disabled]="selectedProduct.stockQuantity === 0">
+          Check Inventory
+        </button>
+        <button 
+          class="btn btn-add-to-cart"
+          (click)="addToCart()"
+          [disabled]="selectedProduct.stockQuantity === 0 || quantity === 0">
+          Add to Cart
+        </button>
+        <button 
+          class="btn btn-checkout"
+          (click)="proceedToCheckout()"
+          [disabled]="selectedProduct.stockQuantity === 0 || quantity === 0">
+          Buy Now
+        </button>
+      </div>
+
+      <!-- Product Details Table -->
+      <div class="details-table-section">
+        <h3>Product Details</h3>
+        <table class="details-table">
+          <tr>
+            <td class="label">Product ID:</td>
+            <td class="value">{{ selectedProduct.id }}</td>
+          </tr>
+          <tr>
+            <td class="label">SKU:</td>
+            <td class="value">{{ selectedProduct.sku }}</td>
+          </tr>
+          <tr>
+            <td class="label">Category:</td>
+            <td class="value">{{ selectedProduct.category }}</td>
+          </tr>
+          <tr>
+            <td class="label">Price:</td>
+            <td class="value">{{ selectedProduct.price | currency }}</td>
+          </tr>
+          <tr>
+            <td class="label">Stock Quantity:</td>
+            <td class="value">{{ selectedProduct.stockQuantity }}</td>
+          </tr>
+          <tr>
+            <td class="label">Status:</td>
+            <td class="value">
+              <span [class.active]="selectedProduct.isActive">
+                {{ selectedProduct.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Not Found -->
+  <div *ngIf="!selectedProduct && !(loading$ | async)" class="not-found">
+    <h2>Product Not Found</h2>
+    <p>The product you're looking for doesn't exist.</p>
+    <button (click)="backToProducts()" class="btn btn-primary">Return to Products</button>
+  </div>
+</div>
