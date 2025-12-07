@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using OrderService.Domain.Entities;
+using OrderService.Application.DTOs;
 
 namespace OrderService.Infrastructure.Persistence;
 

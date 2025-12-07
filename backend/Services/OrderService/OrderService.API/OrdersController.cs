@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using OrderService.Application.Commands;
 using OrderService.Application.Queries;
+using OrderService.Application.DTOs;
 
 namespace OrderService.API.Controllers;
 
@@ -130,7 +131,7 @@ public class OrdersController : ControllerBase
 
         var command = new PlaceOrderCommand(
             request.CustomerId,
-            request.LineItems.Select(li => new OrderService.Application.Commands.OrderLineItemDto
+            request.LineItems.Select(li => new OrderLineItemDto
             {
                 ProductId = li.ProductId,
                 ProductName = li.ProductName,
@@ -273,44 +274,4 @@ public class PlaceOrderLineItemRequest
 public class ShipOrderRequest
 {
     public string TrackingNumber { get; set; } = string.Empty;
-}
-
-public class OrderDto
-{
-    public Guid Id { get; set; }
-    public Guid CustomerId { get; set; }
-    public string Status { get; set; } = string.Empty;
-    public decimal TotalAmount { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? CompletedAt { get; set; }
-    public List<OrderLineItemDto> LineItems { get; set; } = new();
-}
-
-public class OrderLineItemDto
-{
-    public Guid ProductId { get; set; }
-    public string ProductName { get; set; } = string.Empty;
-    public int Quantity { get; set; }
-    public decimal UnitPrice { get; set; }
-}
-
-public class PagedResult<T>
-{
-    public IEnumerable<T> Items { get; set; } = Enumerable.Empty<T>();
-    public int PageNumber { get; set; }
-    public int PageSize { get; set; }
-    public int TotalCount { get; set; }
-    public int TotalPages => (TotalCount + PageSize - 1) / PageSize;
-    public bool HasPreviousPage => PageNumber > 1;
-    public bool HasNextPage => PageNumber < TotalPages;
-}
-
-public class OrderStatisticsDto
-{
-    public int TotalOrders { get; set; }
-    public decimal TotalRevenue { get; set; }
-    public int CompletedOrders { get; set; }
-    public int PendingOrders { get; set; }
-    public int CanceledOrders { get; set; }
-    public decimal AverageOrderValue { get; set; }
 }

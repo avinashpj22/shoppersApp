@@ -1,4 +1,5 @@
 using Azure.Messaging.ServiceBus;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using OrderService.Domain.Entities;
 using OrderService.Application.Commands;

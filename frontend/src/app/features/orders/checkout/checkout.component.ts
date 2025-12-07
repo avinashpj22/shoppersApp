@@ -159,13 +159,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     // Simulate payment processing
     setTimeout(() => {
       // Create order request
-      const orderRequest: CreateOrderRequest = {
-        customerId: 'CUSTOMER_' + Date.now(),
-        lineItems: this.orderItems
-      };
+      const customerId = 'CUSTOMER_' + Date.now();
 
       // Place order via service
-      this.orderService.placeOrder(orderRequest)
+      this.orderService.placeOrder(customerId, this.orderItems)
         .pipe(takeUntil(this.destroy$))
         .subscribe(
           (response: any) => {

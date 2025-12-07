@@ -107,17 +107,19 @@ app.MapHealthChecks("/health");
 app.MapControllers();
 
 // Initialize event subscriptions
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
-try
-{
-    await app.Services.InitializeEventSubscriptionsAsync(logger);
-    logger.LogInformation("Order Service initialized successfully");
-}
-catch (Exception ex)
-{
-    logger.LogError(ex, "Error during Order Service initialization");
-}
+// Note: Event subscriptions disabled for now - needs async disposal pattern
+// var logger = app.Services.GetRequiredService<ILogger<Program>>();
+// try
+// {
+//     await app.Services.InitializeEventSubscriptionsAsync(logger);
+//     logger.LogInformation("Order Service initialized successfully");
+// }
+// catch (Exception ex)
+// {
+//     logger.LogError(ex, "Error during Order Service initialization");
+// }
 
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
 logger.LogInformation("Order Service starting on {Environment}", app.Environment.EnvironmentName);
 
 // ========== RUN APPLICATION ==========

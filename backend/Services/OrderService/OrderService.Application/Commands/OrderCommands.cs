@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using OrderService.Domain.Entities;
 using OrderService.Application.DTOs;
+using OrderService.Application.Interfaces;
 
 namespace OrderService.Application.Commands;
 
@@ -277,35 +278,3 @@ public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, Ord
 // ============================================================================
 // Interfaces and DTOs
 // ============================================================================
-
-public interface IOrderRepository
-{
-    Task<Order?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
-    Task AddAsync(Order order, CancellationToken cancellationToken = default);
-    void Update(Order order);
-    Task SaveChangesAsync(CancellationToken cancellationToken = default);
-}
-
-public interface IEventPublisher
-{
-    Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IDomainEvent;
-}
-
-public class OrderLineItemDto
-{
-    public Guid ProductId { get; set; }
-    public string ProductName { get; set; }
-    public int Quantity { get; set; }
-    public decimal UnitPrice { get; set; }
-}
-
-public class OrderDto
-{
-    public Guid Id { get; set; }
-    public Guid CustomerId { get; set; }
-    public string Status { get; set; }
-    public decimal TotalAmount { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? CompletedAt { get; set; }
-    public List<OrderLineItemDto> LineItems { get; set; } = new();
-}

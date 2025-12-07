@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using ProductService.Domain.Entities;
 using ProductService.Application.DTOs;
+using ProductService.Application.Interfaces;
 
 namespace ProductService.Application.Commands;
 
@@ -204,28 +205,3 @@ public class ReserveInventoryCommandHandler : IRequestHandler<ReserveInventoryCo
 // ============================================================================
 // Interfaces and DTOs
 // ============================================================================
-
-public interface IProductRepository
-{
-    Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
-    Task AddAsync(Product product, CancellationToken cancellationToken = default);
-    void Update(Product product);
-    Task SaveChangesAsync(CancellationToken cancellationToken = default);
-}
-
-public interface IEventPublisher
-{
-    Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IDomainEvent;
-}
-
-public class ProductDto
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public decimal Price { get; set; }
-    public int StockQuantity { get; set; }
-    public string Sku { get; set; }
-    public string Category { get; set; }
-    public bool IsActive { get; set; }
-}
