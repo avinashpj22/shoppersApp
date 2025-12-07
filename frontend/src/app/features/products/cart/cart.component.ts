@@ -40,7 +40,7 @@ export class CartComponent implements OnInit {
   }
 
   getSubtotal(): number {
-    return this.cartItems.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
+    return this.cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
   }
 
   getDiscount(): number {

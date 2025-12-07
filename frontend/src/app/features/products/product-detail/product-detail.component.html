@@ -86,7 +86,7 @@
             type="number" 
             class="qty-input"
             [value]="quantity"
-            (change)="updateQuantity($event.target.value)"
+            (change)="updateQuantity(($event.target as HTMLSelectElement).value)"
             min="1"
             [max]="selectedProduct.stockQuantity">
           <button 

@@ -24,7 +24,7 @@
         <input 
           type="text" 
           placeholder="Search products..." 
-          (keyup.enter)="onSearch($event.target.value)"
+          (keyup.enter)="onSearch(($event.target as HTMLInputElement).value)"
           class="search-input"
         />
         <button class="search-btn">🔍</button>

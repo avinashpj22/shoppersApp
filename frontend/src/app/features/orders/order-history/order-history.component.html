@@ -35,7 +35,7 @@
 
       <div class="sort-group">
         <label>Sort by:</label>
-        <select [value]="sortBy" (change)="onSortChange($event.target.value)" class="sort-select">
+        <select [value]="sortBy" (change)="onSortChange(($event.target as HTMLSelectElement).value)" class="sort-select">
           <option value="date">Recent First</option>
           <option value="amount">Highest Amount</option>
         </select>
@@ -101,11 +101,11 @@
       </div>
       <div class="stat">
         <span class="stat-label">Total Spent:</span>
-        <span class="stat-value">${{ (filteredOrders | reduce: (sum, order) => sum + order.totalAmount: 0) | number: '1.2-2' }}</span>
+        <span class="stat-value">${{ totalRevenue | number: '1.2-2' }}</span>
       </div>
       <div class="stat">
         <span class="stat-label">Total Items:</span>
-        <span class="stat-value">{{ (filteredOrders | reduce: (sum, order) => sum + order.itemCount: 0) }}</span>
+        <span class="stat-value">{{ totalItems }}</span>
       </div>
     </div>
   </div>

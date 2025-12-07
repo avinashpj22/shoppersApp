@@ -44,7 +44,7 @@ export interface Order {
   customerId: string;
   status: 'Pending' | 'Confirmed' | 'Shipped' | 'Completed' | 'Canceled' | 'Failed';
   totalAmount: number;
-  createdAt: Date;
+  createdAt: string;
   completedAt?: Date;
   lineItems: OrderLineItem[];
 }

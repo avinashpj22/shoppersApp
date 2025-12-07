@@ -21,15 +21,15 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of cartItems" class="cart-item">
-              <td>{{ item.productName }}</td>
-              <td>${{ item.price }}</td>
+              <td>{{ item.product.name }}</td>
+              <td>${{ item.product.price }}</td>
               <td>
-                <input type="number" [(ngModel)]="item.quantity" min="1" 
-                  (change)="updateQuantity(item.productId, item.quantity)">
+                <input type="number" [value]="item.quantity"
+                  (change)="updateQuantity(item.product.id, item.quantity)">
               </td>
-              <td>${{ (item.price * item.quantity) }}</td>
+              <td>${{ (item.product.price * item.quantity) }}</td>
               <td>
-                <button class="button button-secondary" (click)="removeItem(item.productId)">Remove</button>
+                <button class="button button-secondary" (click)="removeItem(item.product.id)">Remove</button>
               </td>
             </tr>
           </tbody>
